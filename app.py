@@ -4,16 +4,22 @@ import psycopg2
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+load_dotenv()  # Load environment variables
+print("Database URL:", os.getenv("DATABASE_URL"))  # Check if the URL is loaded correctly
+
 
 # Database connection utility
 def get_db_connection():
     try:
         conn = psycopg2.connect(os.getenv("DATABASE_URL"))
         return conn
+    except psycopg2.OperationalError as e:
+        st.error(f"Operational error when connecting to the database: {e}")
+        return None
     except Exception as e:
         st.error(f"Failed to connect to the database: {e}")
         return None
+
 
 # Function to create a new prompt
 def create_table():
